@@ -63,11 +63,11 @@ defmodule Pawex.Tree do
       iex> BasicTest.paw_run()
       [ok: %{login: true}] 
       """
-      def paw_run do
+      def paw_run(init_state \\ %{}) do
         get_attributes(__MODULE__, :__paws__)
         |> Enum.reduce_while([], fn
           x, acc ->
-            with {:ok, state} <- apply(__MODULE__, :__pre_paw__, [x, %{}]),
+            with {:ok, state} <- apply(__MODULE__, :__pre_paw__, [x, init_state]),
                  {:ok, state} <- apply(__MODULE__, :__paw__, [x, state]) do
               {:cont, [{:ok, state} | acc]}
             else
